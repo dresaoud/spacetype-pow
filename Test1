@@ -1,1 +1,65 @@
-<iframe src="https://pow-animation.netlify.app" width="100%" height="600" style="border:none;"></iframe>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>POW Animation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100%;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://unpkg.com/three@0.120.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.120.0/examples/js/libs/dat.gui.min.js"></script>
+  <script src="https://unpkg.com/three@0.120.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://unpkg.com/three@0.120.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://unpkg.com/three@0.120.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <script src="https://unpkg.com/three@0.120.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://unpkg.com/three@0.120.0/examples/js/shaders/FilmShader.js"></script>
+
+  <script>
+    // Placeholder POW effect — you can replace this with real animation logic
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0070, wireframe: true });
+    const knot = new THREE.Mesh(geometry, material);
+    scene.add(knot);
+
+    camera.position.z = 50;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      knot.rotation.x += 0.01;
+      knot.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Add click interaction
+    document.body.addEventListener('click', () => {
+      knot.material.color.set(Math.random() * 0xffffff);
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
